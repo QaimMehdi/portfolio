@@ -28,7 +28,7 @@ const Tech = () => {
           {isMobile && index >= 8 ? (
             <StaticBall icon={technology.icon} />
           ) : (
-            <BallCanvas icon={technology.icon} />
+            <BallCanvas icon={technology.icon} isMobile={isMobile} />
           )}
         </div>
       ))}

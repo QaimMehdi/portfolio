@@ -9,7 +9,6 @@ import {
 } from "@react-three/drei";
 
 import CanvasLoader from "../Loader";
-import ballPlaceholder from "../../assets/tech/ball_placeholder.png";
 
 const Ball = (props) => {
   const [decal] = useTexture([props.imgUrl]);
@@ -37,14 +36,17 @@ const Ball = (props) => {
     </Float>
   );
 };
-
-
-
-const BallCanvas = ({ icon }) => {
+const BallCanvas = ({ icon, isMobile }) => {
   const [isInView, setIsInView] = React.useState(false);
   const containerRef = React.useRef();
 
   React.useEffect(() => {
+    // On desktop, we want the balls to always be active for free movement
+    if (!isMobile) {
+      setIsInView(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
@@ -61,27 +63,22 @@ const BallCanvas = ({ icon }) => {
         observer.unobserve(containerRef.current);
       }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <div ref={containerRef} className='w-full h-full relative flex justify-center items-center'>
-      {/* Background Placeholder - Always visible to prevent white boxes */}
-      <div className='w-full h-full absolute flex justify-center items-center'>
-        <img
-          src={ballPlaceholder}
-          alt='ball-placeholder'
-          className={`w-full h-full object-contain absolute transition-opacity duration-500 ${isInView ? "opacity-20" : "opacity-100"
-            }`}
-        />
-        <img
-          src={icon}
-          alt='tech-icon'
-          className={`w-1/2 h-1/2 object-contain absolute z-10 transition-opacity duration-500 ${isInView ? "opacity-0" : "opacity-80"
-            }`}
-        />
+      {/* CSS-based 3D Placeholder - Perfectly transparent and lightweight */}
+      <div className={`w-full h-full absolute flex justify-center items-center pointer-events-none transition-opacity duration-500 ${isInView ? "opacity-0" : "opacity-100"}`}>
+        <div className='w-[90%] h-[90%] rounded-full bg-[#fff8eb] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.2),10px_10px_20px_rgba(0,0,0,0.1)] flex justify-center items-center'>
+          <img
+            src={icon}
+            alt='tech-icon'
+            className='w-1/2 h-1/2 object-contain opacity-80'
+          />
+        </div>
       </div>
 
-      {/* 3D Ball - Only active when in view to save WebGL contexts */}
+      {/* 3D Ball - Active only when needed on mobile, always on desktop */}
       {isInView && (
         <Canvas
           frameloop='demand'
