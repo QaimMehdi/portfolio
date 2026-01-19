@@ -9,6 +9,7 @@ import {
 } from "@react-three/drei";
 
 import CanvasLoader from "../Loader";
+import ballPlaceholder from "../../assets/tech/ball_placeholder.png";
 
 const Ball = (props) => {
   const [decal] = useTexture([props.imgUrl]);
@@ -37,7 +38,7 @@ const Ball = (props) => {
   );
 };
 
-import ballPlaceholder from "../../assets/tech/ball_placeholder.png";
+
 
 const BallCanvas = ({ icon }) => {
   const [isInView, setIsInView] = React.useState(false);
