@@ -18,6 +18,17 @@
     </div>
 </div>
 
+## 🚀 Custom Optimizations & Fixes
+
+This version of the portfolio includes several custom enhancements for better performance and reliability:
+
+- **Deployment Fix**: Resolved npm peer dependency conflicts using `.npmrc` for seamless Netlify deployment.
+- **3D Performance**: Implemented GLTF preloading and optimized Canvas settings (DPR, Power Preference) for faster 3D rendering.
+- **Lazy Loading**: Integrated React lazy loading for heavy 3D components to improve initial page load speed.
+- **EmailJS Fix**: Corrected template configurations and auto-reply logic for reliable contact form functionality.
+
+---
+
 ## 📋 <a name="table">Table of Contents</a>
 
 1. 🤖 [Introduction](#introduction)
