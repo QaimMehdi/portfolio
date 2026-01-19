@@ -51,7 +51,6 @@ const Contact = () => {
 
           setForm({
             from_name: "",
-            from_name: "",
             from_email: "",
             message: "",
           });
