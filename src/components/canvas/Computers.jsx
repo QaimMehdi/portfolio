@@ -15,8 +15,8 @@ const Computers = ({ isMobile }) => {
         angle={0.12}
         penumbra={1}
         intensity={1}
-        castShadow
-        shadow-mapSize={512}
+        castShadow={!isMobile}
+        shadow-mapSize={isMobile ? 256 : 512}
       />
       <pointLight intensity={1} />
       <primitive
@@ -56,9 +56,14 @@ const ComputersCanvas = () => {
   return (
     <Canvas
       frameloop='demand'
-      dpr={[1, 1]}
+      shadows={!isMobile}
+      dpr={isMobile ? [1, 1] : [1, 2]}
       camera={{ position: [20, 3, 5], fov: 25 }}
-      gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+      gl={{
+        preserveDrawingBuffer: true,
+        powerPreference: "high-performance",
+        antialias: !isMobile
+      }}
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls

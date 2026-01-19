@@ -82,8 +82,13 @@ const BallCanvas = ({ icon, isMobile }) => {
       {isInView && (
         <Canvas
           frameloop='demand'
-          dpr={[1, 1]}
-          gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+          shadows={!isMobile}
+          dpr={isMobile ? [1, 1] : [1, 2]}
+          gl={{
+            preserveDrawingBuffer: true,
+            powerPreference: "high-performance",
+            antialias: !isMobile
+          }}
           className='w-full h-full'
         >
           <Suspense fallback={<CanvasLoader />}>

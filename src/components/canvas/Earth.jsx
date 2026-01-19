@@ -14,9 +14,19 @@ const Earth = () => {
 
 const EarthCanvas = () => {
   const [isInView, setIsInView] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
   const containerRef = React.useRef();
 
   React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 500px)");
+    setIsMobile(mediaQuery.matches);
+
+    const handleMediaQueryChange = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
@@ -29,6 +39,7 @@ const EarthCanvas = () => {
     }
 
     return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
       if (containerRef.current) {
         observer.unobserve(containerRef.current);
       }
@@ -42,10 +53,14 @@ const EarthCanvas = () => {
       )}
       {isInView && (
         <Canvas
-          shadows
+          shadows={!isMobile}
           frameloop='demand'
-          dpr={[1, 1]}
-          gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+          dpr={isMobile ? [1, 1] : [1, 2]}
+          gl={{
+            preserveDrawingBuffer: true,
+            powerPreference: "high-performance",
+            antialias: !isMobile
+          }}
           camera={{
             fov: 45,
             near: 0.1,

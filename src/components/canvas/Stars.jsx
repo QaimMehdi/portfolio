@@ -29,9 +29,19 @@ const Stars = (props) => {
 
 const StarsCanvas = () => {
     const [isInView, setIsInView] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef();
 
     React.useEffect(() => {
+        const mediaQuery = window.matchMedia("(max-width: 500px)");
+        setIsMobile(mediaQuery.matches);
+
+        const handleMediaQueryChange = (event) => {
+            setIsMobile(event.matches);
+        };
+
+        mediaQuery.addEventListener("change", handleMediaQueryChange);
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 setIsInView(entry.isIntersecting);
@@ -44,6 +54,7 @@ const StarsCanvas = () => {
         }
 
         return () => {
+            mediaQuery.removeEventListener("change", handleMediaQueryChange);
             if (containerRef.current) {
                 observer.unobserve(containerRef.current);
             }
@@ -53,7 +64,11 @@ const StarsCanvas = () => {
     return (
         <div ref={containerRef} className='w-full h-auto absolute inset-0 z-[-1]'>
             {isInView && (
-                <Canvas camera={{ position: [0, 0, 1] }}>
+                <Canvas
+                    camera={{ position: [0, 0, 1] }}
+                    dpr={isMobile ? [1, 1] : [1, 2]}
+                    gl={{ antialias: !isMobile }}
+                >
                     <Suspense fallback={null}>
                         <Stars />
                     </Suspense>
