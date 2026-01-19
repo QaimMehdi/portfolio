@@ -38,15 +38,17 @@ const Ball = (props) => {
 };
 
 const BallCanvas = ({ icon }) => {
-  const [isInView, setIsInView] = React.useState(false);
+  const [hasBeenInView, setHasBeenInView] = React.useState(false);
   const containerRef = React.useRef();
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setHasBeenInView(true);
+        }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: "200px" }
     );
 
     if (containerRef.current) {
@@ -61,8 +63,11 @@ const BallCanvas = ({ icon }) => {
   }, []);
 
   return (
-    <div ref={containerRef} className='w-full h-full'>
-      {isInView && (
+    <div ref={containerRef} className='w-full h-full relative flex justify-center items-center'>
+      {!hasBeenInView && (
+        <img src={icon} alt='tech' className='w-full h-full object-contain opacity-50' />
+      )}
+      {hasBeenInView && (
         <Canvas
           frameloop='demand'
           dpr={[1, 1]}
