@@ -37,6 +37,8 @@ const Ball = (props) => {
   );
 };
 
+import ballPlaceholder from "../../assets/tech/ball_placeholder.png";
+
 const BallCanvas = ({ icon }) => {
   const [isInView, setIsInView] = React.useState(false);
   const containerRef = React.useRef();
@@ -63,12 +65,20 @@ const BallCanvas = ({ icon }) => {
   return (
     <div ref={containerRef} className='w-full h-full relative flex justify-center items-center'>
       {/* Background Placeholder - Always visible to prevent white boxes */}
-      <img
-        src={icon}
-        alt='tech'
-        className={`w-full h-full object-contain absolute transition-opacity duration-500 ${isInView ? "opacity-20" : "opacity-100"
-          }`}
-      />
+      <div className='w-full h-full absolute flex justify-center items-center'>
+        <img
+          src={ballPlaceholder}
+          alt='ball-placeholder'
+          className={`w-full h-full object-contain absolute transition-opacity duration-500 ${isInView ? "opacity-20" : "opacity-100"
+            }`}
+        />
+        <img
+          src={icon}
+          alt='tech-icon'
+          className={`w-1/2 h-1/2 object-contain absolute z-10 transition-opacity duration-500 ${isInView ? "opacity-0" : "opacity-80"
+            }`}
+        />
+      </div>
 
       {/* 3D Ball - Only active when in view to save WebGL contexts */}
       {isInView && (
