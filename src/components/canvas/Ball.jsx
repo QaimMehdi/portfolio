@@ -38,17 +38,15 @@ const Ball = (props) => {
 };
 
 const BallCanvas = ({ icon }) => {
-  const [hasBeenInView, setHasBeenInView] = React.useState(false);
+  const [isInView, setIsInView] = React.useState(false);
   const containerRef = React.useRef();
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasBeenInView(true);
-        }
+        setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.1, rootMargin: "200px" }
+      { threshold: 0.1, rootMargin: "150px" }
     );
 
     if (containerRef.current) {
@@ -64,14 +62,21 @@ const BallCanvas = ({ icon }) => {
 
   return (
     <div ref={containerRef} className='w-full h-full relative flex justify-center items-center'>
-      {!hasBeenInView && (
-        <img src={icon} alt='tech' className='w-full h-full object-contain opacity-50' />
-      )}
-      {hasBeenInView && (
+      {/* Background Placeholder - Always visible to prevent white boxes */}
+      <img
+        src={icon}
+        alt='tech'
+        className={`w-full h-full object-contain absolute transition-opacity duration-500 ${isInView ? "opacity-20" : "opacity-100"
+          }`}
+      />
+
+      {/* 3D Ball - Only active when in view to save WebGL contexts */}
+      {isInView && (
         <Canvas
           frameloop='demand'
           dpr={[1, 1]}
           gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+          className='w-full h-full'
         >
           <Suspense fallback={<CanvasLoader />}>
             <OrbitControls enableZoom={false} />
