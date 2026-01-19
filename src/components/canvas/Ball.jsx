@@ -46,7 +46,7 @@ const BallCanvas = ({ icon }) => {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.1, rootMargin: "150px" }
+      { threshold: 0.1, rootMargin: "50px" }
     );
 
     if (containerRef.current) {
