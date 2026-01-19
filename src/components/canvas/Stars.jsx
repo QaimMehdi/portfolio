@@ -28,15 +28,39 @@ const Stars = (props) => {
 };
 
 const StarsCanvas = () => {
-    return (
-        <div className='w-full h-auto absolute inset-0 z-[-1]'>
-            <Canvas camera={{ position: [0, 0, 1] }}>
-                <Suspense fallback={null}>
-                    <Stars />
-                </Suspense>
+    const [isInView, setIsInView] = useState(false);
+    const containerRef = useRef();
 
-                <Preload all />
-            </Canvas>
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsInView(entry.isIntersecting);
+            },
+            { threshold: 0.01, rootMargin: "100px" }
+        );
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+
+        return () => {
+            if (containerRef.current) {
+                observer.unobserve(containerRef.current);
+            }
+        };
+    }, []);
+
+    return (
+        <div ref={containerRef} className='w-full h-auto absolute inset-0 z-[-1]'>
+            {isInView && (
+                <Canvas camera={{ position: [0, 0, 1] }}>
+                    <Suspense fallback={null}>
+                        <Stars />
+                    </Suspense>
+
+                    <Preload all />
+                </Canvas>
+            )}
         </div>
     );
 };
