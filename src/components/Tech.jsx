@@ -1,6 +1,6 @@
-import React from "react";
-
 import { BallCanvas, StaticBall } from "./canvas";
+import { SectionWrapper } from "../hoc";
+import { technologies } from "../constants";
 
 const Tech = () => {
   const [isMobile, setIsMobile] = React.useState(false);
