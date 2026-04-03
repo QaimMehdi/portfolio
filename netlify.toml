@@ -43,24 +43,10 @@
     X-Content-Type-Options = "nosniff"
 
 # ============================================================================
-# COMPRESSION - Enable all formats for maximum efficiency
+# COMPRESSION - Netlify automatically serves brotli/gzip pre-compressed files
 # ============================================================================
-
-# Gzip and Brotli compressed versions
-[[headers]]
-  for = "*.js"
-  [headers.values]
-    Content-Encoding = "gzip, br"
-
-[[headers]]
-  for = "*.css"
-  [headers.values]
-    Content-Encoding = "gzip, br"
-
-[[headers]]
-  for = "*.svg"
-  [headers.values]
-    Content-Encoding = "gzip, br"
+# Note: Do NOT set Content-Encoding headers manually for pre-compressed files
+# Netlify detects .br and .gz files and serves them automatically with proper encoding
 
 # ============================================================================
 # 3D MODEL OPTIMIZATION - Critical for performance
@@ -72,7 +58,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "model/gltf+json; charset=utf-8"
-    Content-Encoding = "gzip, br"
     # Enable range requests for resumable downloads on slow connections
     Accept-Ranges = "bytes"
 
@@ -82,7 +67,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "application/octet-stream"
-    Content-Encoding = "gzip, br"
     Accept-Ranges = "bytes"
 
 # Planet Model - Non-critical, can have slightly shorter cache during dev
@@ -91,7 +75,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "model/gltf+json; charset=utf-8"
-    Content-Encoding = "gzip, br"
     Accept-Ranges = "bytes"
 
 # Planet Data
@@ -100,7 +83,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "application/octet-stream"
-    Content-Encoding = "gzip, br"
     Accept-Ranges = "bytes"
 
 # All GLTF Models - Long cache since they're immutable
@@ -109,7 +91,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "model/gltf+json; charset=utf-8"
-    Content-Encoding = "gzip, br"
 
 # Binary 3D Data Files - CRITICAL OPTIMIZATION
 [[headers]]
@@ -117,21 +98,18 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "application/octet-stream"
-    Content-Encoding = "gzip, br"
 
 # Desktop PC 3D Model Textures
 [[headers]]
   for = "/desktop_pc/textures/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip, br"
 
 # Planet Textures
 [[headers]]
   for = "/planet/textures/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip, br"
 
 # ============================================================================
 # IMAGE OPTIMIZATION - Reduce data transfer
@@ -142,20 +120,17 @@
   for = "/*.png"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip, br"
 
 # JPEG Images
 [[headers]]
   for = "/*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip, br"
 
 [[headers]]
   for = "/*.jpeg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip, br"
 
 # AVIF Images (modern format, smallest)
 [[headers]]
@@ -163,7 +138,6 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "image/avif"
-    Content-Encoding = "gzip, br"
 
 # ============================================================================
 # HTTP/2 PUSH & PRELOAD - Speed up critical asset delivery
