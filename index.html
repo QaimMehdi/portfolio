@@ -16,6 +16,12 @@
     
     <!-- Font with display=swap for non-blocking rendering -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Prefetch 3D model assets (low priority, won't block) -->
+    <link rel="prefetch" href="/desktop_pc/scene.gltf" as="fetch" crossorigin />
+    <link rel="prefetch" href="/desktop_pc/scene.data" as="fetch" crossorigin />
+    <link rel="prefetch" href="/planet/scene.gltf" as="fetch" crossorigin />
+    <link rel="prefetch" href="/planet/scene.data" as="fetch" crossorigin />
   </head>
   <body>
     <div id="root"></div>

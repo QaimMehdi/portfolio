@@ -15,6 +15,7 @@ const Earth = () => {
 const EarthCanvas = () => {
   const [isInView, setIsInView] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(false);
+  const [isPreloading, setIsPreloading] = React.useState(false);
   const containerRef = React.useRef();
 
   React.useEffect(() => {
@@ -30,8 +31,19 @@ const EarthCanvas = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
+        
+        // Preload model when user gets close (rootMargin triggers before visible)
+        if (entry.isIntersecting && !isPreloading) {
+          setIsPreloading(true);
+          // Stagger preload to avoid network congestion
+          setTimeout(() => {
+            useGLTF.preload("./planet/scene.gltf").catch(() => {
+              // Silently handle preload errors
+            });
+          }, 500);
+        }
       },
-      { threshold: 0.1, rootMargin: "200px" }
+      { threshold: 0.01, rootMargin: "300px" }
     );
 
     if (containerRef.current) {
@@ -44,7 +56,7 @@ const EarthCanvas = () => {
         observer.unobserve(containerRef.current);
       }
     };
-  }, []);
+  }, [isPreloading]);
 
   return (
     <div ref={containerRef} className='w-full h-full relative'>
@@ -84,7 +96,5 @@ const EarthCanvas = () => {
     </div>
   );
 };
-
-useGLTF.preload("./planet/scene.gltf");
 
 export default EarthCanvas;

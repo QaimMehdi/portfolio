@@ -53,6 +53,15 @@ const ComputersCanvas = () => {
     };
   }, []);
 
+  // Defer preloading until after page interactive (more important content loads first)
+  React.useEffect(() => {
+    const preloadTimer = setTimeout(() => {
+      useGLTF.preload("./desktop_pc/scene.gltf");
+    }, 2000); // Delay preload by 2 seconds after component mounts
+    
+    return () => clearTimeout(preloadTimer);
+  }, []);
+
   return (
     <Canvas
       frameloop='demand'
@@ -65,7 +74,8 @@ const ComputersCanvas = () => {
         antialias: !isMobile,
         stencil: false,
         depth: true,
-        alpha: true
+        alpha: true,
+        failIfMajorPerformanceCaveat: false
       }}
     >
       <Suspense fallback={<CanvasLoader />}>
@@ -81,8 +91,5 @@ const ComputersCanvas = () => {
     </Canvas>
   );
 };
-
-// Preload with lower priority to prevent blocking main thread
-useGLTF.preload("./desktop_pc/scene.gltf");
 
 export default ComputersCanvas;

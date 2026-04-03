@@ -58,9 +58,46 @@
 # 3D MODEL OPTIMIZATION - Critical for performance
 # ============================================================================
 
-# GLTF Models - Long cache since they're immutable
+# Desktop PC Models - Optimize for hero section (critical)
 [[headers]]
-  for = "/*.gltf"
+  for = "/desktop_pc/scene.gltf"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "model/gltf+json; charset=utf-8"
+    Content-Encoding = "gzip, br"
+    # Enable range requests for resumable downloads on slow connections
+    Accept-Ranges = "bytes"
+
+# Desktop PC Data - Binary 3D mesh data
+[[headers]]
+  for = "/desktop_pc/scene.data"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/octet-stream"
+    Content-Encoding = "gzip, br"
+    Accept-Ranges = "bytes"
+
+# Planet Model - Non-critical, can have slightly shorter cache during dev
+[[headers]]
+  for = "/planet/scene.gltf"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "model/gltf+json; charset=utf-8"
+    Content-Encoding = "gzip, br"
+    Accept-Ranges = "bytes"
+
+# Planet Data
+[[headers]]
+  for = "/planet/scene.data"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/octet-stream"
+    Content-Encoding = "gzip, br"
+    Accept-Ranges = "bytes"
+
+# All GLTF Models - Long cache since they're immutable
+[[headers]]
+  for = "*.gltf"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "model/gltf+json; charset=utf-8"
@@ -68,7 +105,7 @@
 
 # Binary 3D Data Files - CRITICAL OPTIMIZATION
 [[headers]]
-  for = "/*.data"
+  for = "*.data"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Content-Type = "application/octet-stream"
