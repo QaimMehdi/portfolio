@@ -57,12 +57,15 @@ const ComputersCanvas = () => {
     <Canvas
       frameloop='demand'
       shadows={!isMobile}
-      dpr={isMobile ? [1, 1] : [1, 2]}
+      dpr={isMobile ? 1 : [1, 1.5]}
       camera={{ position: [20, 3, 5], fov: 25 }}
       gl={{
         preserveDrawingBuffer: true,
         powerPreference: "high-performance",
-        antialias: !isMobile
+        antialias: !isMobile,
+        stencil: false,
+        depth: true,
+        alpha: true
       }}
     >
       <Suspense fallback={<CanvasLoader />}>
@@ -79,6 +82,7 @@ const ComputersCanvas = () => {
   );
 };
 
+// Preload with lower priority to prevent blocking main thread
 useGLTF.preload("./desktop_pc/scene.gltf");
 
 export default ComputersCanvas;

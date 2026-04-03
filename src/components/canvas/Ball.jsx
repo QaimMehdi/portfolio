@@ -83,11 +83,14 @@ const BallCanvas = ({ icon, isMobile }) => {
         <Canvas
           frameloop='demand'
           shadows={!isMobile}
-          dpr={isMobile ? [1, 1] : [1, 2]}
+          dpr={isMobile ? 1 : [1, 1.5]}
           gl={{
             preserveDrawingBuffer: true,
             powerPreference: "high-performance",
-            antialias: !isMobile
+            antialias: !isMobile,
+            stencil: false,
+            depth: true,
+            alpha: true
           }}
           className='w-full h-full'
         >

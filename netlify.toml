@@ -1,80 +1,146 @@
-# Netlify Configuration for Performance Optimization
+# Netlify Configuration for Optimal Performance
+# Focus: Reduce LCP, TBT, and maximize Core Web Vitals
 
-# Redirects
-[[redirects]]
-  from = "/*"
-  to = "/:splat"
-  status = 200
-  force = false
+[build]
+  command = "npm run build"
+  publish = "dist"
+  
+# Serverless functions configuration
+[functions]
+  directory = "netlify/functions"
 
-# Preload critical assets - Hero background image (loads first)
+# Global context for environment variables
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+# ============================================================================
+# CACHING STRATEGY - Aggressive for production
+# ============================================================================
+
+# HTML - Short cache, must revalidate for fresh content
 [[headers]]
-  for = "/src/assets/herobg.png"
+  for = "/*.html"
   [headers.values]
-    Link = "</src/assets/herobg.png>; rel=preload; as=image"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Preload 3D models - Desktop PC scene
+# JavaScript & CSS - Long cache since they're hashed
 [[headers]]
-  for = "/desktop_pc/scene.gltf"
+  for = "/assets/*"
   [headers.values]
-    Link = "</desktop_pc/scene.gltf>; rel=preload; as=fetch"
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
-# Preload 3D models - Planet scene
+# ============================================================================
+# COMPRESSION - Enable all formats for maximum efficiency
+# ============================================================================
+
+# Gzip and Brotli compressed versions
 [[headers]]
-  for = "/planet/scene.gltf"
+  for = "*.js"
   [headers.values]
-    Link = "</planet/scene.gltf>; rel=preload; as=fetch"
+    Content-Encoding = "gzip, br"
 
-# Cache 3D models for a year
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Content-Encoding = "gzip, br"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Content-Encoding = "gzip, br"
+
+# ============================================================================
+# 3D MODEL OPTIMIZATION - Critical for performance
+# ============================================================================
+
+# GLTF Models - Long cache since they're immutable
 [[headers]]
   for = "/*.gltf"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "model/gltf+json; charset=utf-8"
+    Content-Encoding = "gzip, br"
 
-# Cache textures for 3D models
+# Binary 3D Data Files - CRITICAL OPTIMIZATION
+[[headers]]
+  for = "/*.data"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/octet-stream"
+    Content-Encoding = "gzip, br"
+
+# Desktop PC 3D Model Textures
 [[headers]]
   for = "/desktop_pc/textures/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Encoding = "gzip, br"
 
+# Planet Textures
 [[headers]]
   for = "/planet/textures/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Encoding = "gzip, br"
 
-# Cache PNG/JPG images
+# ============================================================================
+# IMAGE OPTIMIZATION - Reduce data transfer
+# ============================================================================
+
+# PNG Images
 [[headers]]
   for = "/*.png"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Encoding = "gzip, br"
 
+# JPEG Images
 [[headers]]
   for = "/*.jpg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Encoding = "gzip, br"
 
 [[headers]]
   for = "/*.jpeg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Encoding = "gzip, br"
 
-# Cache AVIF images
+# AVIF Images (modern format, smallest)
 [[headers]]
   for = "/*.avif"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "image/avif"
+    Content-Encoding = "gzip, br"
 
-# Cache compiled assets (JS/CSS)
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+# ============================================================================
+# HTTP/2 PUSH & PRELOAD - Speed up critical asset delivery
+# ============================================================================
 
-# Enable compression for text-based assets
+# Push critical CSS (Tailwind compiled)
 [[headers]]
   for = "/"
   [headers.values]
+    Link = "</assets/index.css>; rel=preload; as=style"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# ============================================================================
+# REDIRECTS
+# ============================================================================
+
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200
+  force = false
