@@ -5,13 +5,21 @@
   command = "npm run build"
   publish = "dist"
   
+# Environment variables for build
+[build.environment]
+  # Ensure devDependencies are installed (vite is a devDependency)
+  npm_config_legacy_peer_deps = "true"
+  CI = "false"
+  NODE_ENV = "development"
+  
 # Serverless functions configuration
 [functions]
   directory = "netlify/functions"
 
-# Global context for environment variables
+# Production context with proper env vars
 [context.production]
-  environment = { NODE_ENV = "production" }
+  command = "npm run build"
+  environment = { NODE_ENV = "production", CI = "false" }
 
 # ============================================================================
 # CACHING STRATEGY - Aggressive for production
