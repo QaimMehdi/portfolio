@@ -151,19 +151,19 @@ const experiences = [
       "Evaluated code, provided structured feedback, and reviewed 100+ student submissions to reinforce clean coding practices.",
     ],
   },
-  {
-    title: "Software Development Intern",
-    company_name: "DevelopersHub Corporation©",
-    icon: devhub1,
-    iconBg: "#383E56",
-    date: "March 2025 - April 2025",
-    points: [
-      "Developing and maintaining web applications using React.js and other related technologies.",
-      "Collaborating with cross-functional teams including designers, product managers, and other developers to create high-quality products.",
-      "Implementing responsive design and ensuring cross-browser compatibility.",
-      "Participating in code reviews and providing constructive feedback to other developers.",
-    ],
-  },
+{
+  title: "Software Development Intern",
+  company_name: "10Pearls",
+  icon: devhub1,
+  iconBg: "#383E56",
+  date: "March 2026 - May 2026",
+  points: [
+    "Completed a structured software development internship focused on real-world engineering workflows and development practices.",
+    "Contributed to software development tasks including debugging issues, implementing features, and improving code efficiency.",
+    "Collaborated with senior engineers and cross-functional teams while following clean coding standards and industry best practices.",
+    "Strengthened understanding of the software development lifecycle, version control systems, and practical engineering concepts.",
+  ],
+},
   {
     title: "Freelancer",
     company_name: "Freelancer",
